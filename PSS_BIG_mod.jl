@@ -8,7 +8,7 @@ using PyCall
 pygui(:qt)
 using PyPlot
 pygui(true)
-barrier=100
+# barrier=100
 
 function condition2(u,t,integrator) # Event when event_f(u,t) == 0
  u[1]
