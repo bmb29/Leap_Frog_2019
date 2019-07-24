@@ -10,7 +10,7 @@ pygui(true)
 
 
 
-
+test=a
 Energy=BigFloat("0.1249")
 H=(2*Energy)^2
 t_end=100
