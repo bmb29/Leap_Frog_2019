@@ -3,15 +3,18 @@ using ProgressMeter
 using MATLAB
 
 
-mat"figure; hold on;"
-H=[.09,.1,.11]
+ # @showprogress 1 "Computing..."
+H=[.09,.095,.1,.115,.11]
+max_hit=50
 for Energy in H
-
+mat"figure; hold on;"
 location="~/MATLAB-Drive/PSS_LEAP_FROG_CENTER/"
 
 h=replace(string(Energy),"."=>"_")
 file_name=location*h*".fig"
-max_hit=50
+println(file_name)
+
+println(max_hit)
 # n_iter_Q=100;
 # Q_start=-1
 # Q_end=1
@@ -41,7 +44,7 @@ mat"axis([ -.03,.03,-.4,.4 ])"
 #
 # mat"axis([ -3,3,-1.5, 1.5])"
 # @showprogress 1 "Computing..."
- @showprogress 1 "Computing..." for j=1:n_iter_P
+for j=1:n_iter_P
     for k=1:n_iter_Q
         Q,P,dH=PSS_function(ArrQ[k], ArrP[j], Energy, t_end, max_hit)
         if dH<5e-12 #make sure dH is ok
@@ -64,5 +67,5 @@ mat"axis([ -.03,.03,-.4,.4 ])"
         end
     end
 end
-mat"savefig($file_name)"
+mat"savefig($file_name),close"
 end
