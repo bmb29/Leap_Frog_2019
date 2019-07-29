@@ -7,7 +7,7 @@ include("PSS_function.jl")
 # H=range(.12,stop=0.144281,length=211);
 H=[0.112012,.125789, .135]
 H=.13
-max_hit=1000
+max_hit=100
 @showprogress 1 "Computing..." for Energy in H
 
 mat"""

@@ -56,15 +56,10 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
         u0[3]=Q #Q
         u0[4]=Y[1] #Y
         u0[5]=0 #Y
-        # counter variable
-        #are the initial conditions right?
-        # prob_test= ODEProblem(Eq_of_M,u0,(0., 10.))
-        # sol_test=solve(prob_test, RK4(),maxiters=1e10 )
-        # S=sign(sol_test.u[2][1])
         if true
             prob = ODEProblem(Eq_of_M,u0,(0., t_end))
-            # sol=solve(prob,RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb)
-            sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-8,abstol=1e-10,callback=cb)
+            sol=solve(prob,RK4(),reltol=1e-6,abstol=1e-8,callback=cb)
+            # sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-8,abstol=1e-10,callback=cb)
             uf=zeros(5)
             uf[1]=sol[1,end] #X
             uf[2]=sol[2,end] #P
@@ -74,7 +69,7 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
             dH=abs(H_test(uf)-H)
             #
             if dH<1e-5
-                B=hcat(sol.u[end-10],sol.u[end])'
+                # B=hcat(sol.u[end-10],sol.u[end])'
                 if is_it_exit(sol.u[end],H,tol_dist)
                     return sol.u[end][5]
                 else
