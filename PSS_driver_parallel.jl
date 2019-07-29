@@ -1,5 +1,4 @@
  using Distributed
-@everywhere using DelimitedFiles
 @everywhere using DifferentialEquations
 @everywhere using ProgressMeter
 
