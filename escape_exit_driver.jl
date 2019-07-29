@@ -4,7 +4,7 @@ using Printf
 using MATLAB
 include("escape_exit_function.jl")
 
-max_hit=4
+max_hit=5
 Energy=.25
 t_end=1000.
 n_iter_P=500
@@ -17,10 +17,6 @@ location="~/Desktop/"
 h=replace(@sprintf("%.13f",Energy),"."=>"_")
 file_name=location*"Escape_"*h*".fig"
 println(file_name)
-#
-#
-# Q_bound=zeros(0)
-# P_bound=zeros(0)
 
 Q_0=zeros(0)
 P_0=zeros(0)
@@ -39,8 +35,6 @@ P_4=zeros(0)
 
 @showprogress 1 "Computing..." for j=1:n_iter_P
     for k=1:n_iter_Q
-        # ArrQ[k]=.1*rand()
-        # ArrP[j]=.01*rand()
         K=escape_exit_function(ArrQ[k],ArrP[j], Energy, t_end, max_hit)
         if K==0
             push!(Q_0,ArrQ[k])

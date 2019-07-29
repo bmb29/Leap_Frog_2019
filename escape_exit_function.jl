@@ -1,10 +1,8 @@
 
 include("YfindNP.jl")
-include("is_it_exit.jl")
 include("is_it.jl")
 
 
-Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
 ODE1(z,w)=conj(  im * w.*( 1 ./(z.^2-w.^2)+1 ./(1+w.^2) ))
 function Eq_of_M(du,u,p,t)
@@ -58,8 +56,8 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
         u0[5]=0 #Y
         if true
             prob = ODEProblem(Eq_of_M,u0,(0., t_end))
-            sol=solve(prob,RK4(),reltol=1e-6,abstol=1e-8,callback=cb)
-            # sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-8,abstol=1e-10,callback=cb)
+            # sol=solve(prob,RK4(),reltol=1e-8,abstol=1e-10,callback=cb)
+            sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-8,abstol=1e-10,callback=cb)
             uf=zeros(5)
             uf[1]=sol[1,end] #X
             uf[2]=sol[2,end] #P
@@ -69,8 +67,7 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
             dH=abs(H_test(uf)-H)
             #
             if dH<1e-5
-                # B=hcat(sol.u[end-10],sol.u[end])'
-                if is_it_exit(sol.u[end],H,tol_dist)
+                if is_it(uf,H,tol_dist)
                     return sol.u[end][5]
                 else
                     return -1

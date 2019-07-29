@@ -1,6 +1,7 @@
 using Roots
 using DifferentialEquations
 using Printf
+using YfindNP
 #equations used for describing motion and conserved quantities
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
@@ -46,16 +47,6 @@ cb2 = ContinuousCallback(condition2,affect2!,nothing)
 #creates callback set, put ContinuousCallback first since the update will affect DiscreteCallback
 cb=CallbackSet(cb2,cb1)
 
-#given Q,P, H and X=0, find Y
-function YfindNP(Q,P,H)
-    Y_find1(y)=Hamil(0,y,Q,P)-H
-
-    try
-        Y=find_zero(Y_find1,1, maxeval=100,maxfnevals=300,tol=1e-15)
-     catch
-        Y=zeros(0)
-    end
-end
 
 
 function PSS_function(Q,P, Energy,  t_end,    max_hit)
