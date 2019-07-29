@@ -1,6 +1,6 @@
 using Roots
 using DifferentialEquations
-
+using Printf
 #equations used for describing motion and conserved quantities
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
@@ -80,7 +80,7 @@ function PSS_function(Q,P, Energy,  t_end,    max_hit)
         prob = ODEProblem(Eq_of_M,u0,(0., t_end))
 
         #solve ode , save_everystep=false is important to prevent sol to include all points, not just event points
-        sol=solve(prob, Vern9(),maxiters=1e20, reltol=1e-14,abstol=1e-16,callback=cb,save_start=true,save_end=true,save_everystep=false)
+        sol=solve(prob, Vern9(),maxiters=1e20, reltol=1e-13,abstol=1e-15,callback=cb,save_start=true,save_end=true,save_everystep=false)
 
         #find final value to check if energy was conserved
         uf=zeros(5)

@@ -3,18 +3,29 @@ using ProgressMeter
 using MATLAB
 
 
- # @showprogress 1 "Computing..."
-H=[.09,.095,.1,.115,.11]
-max_hit=50
-for Energy in H
-mat"figure; hold on;"
-location="~/MATLAB-Drive/PSS_LEAP_FROG_CENTER/"
 
-h=replace(string(Energy),"."=>"_")
+# H=range(.12,stop=0.144281,length=211);
+H=[0.112,.1251, .135]
+max_hit=1000
+@showprogress 1 "Computing..." for Energy in H
+
+mat"""
+figure; hold on;
+set(gcf, 'Position',  [0, 0, 1500, 1000])
+"""
+# set(gca,'XTick',[])
+# set(gca,'YTick',[])
+# set(gca,'xticklabel',[])
+# set(gca,'yticklabel',[])
+# set(gca,'XColor','none')
+# set(gca,'YColor','none')
+# set(gca,'XColor','none')
+# set(gca,'YColor','none')
+location="~/MATLAB-Drive/"
+h=replace(@sprintf("%.13f",Energy),"."=>"_")
 file_name=location*h*".fig"
 println(file_name)
 
-println(max_hit)
 # n_iter_Q=100;
 # Q_start=-1
 # Q_end=1
@@ -29,7 +40,7 @@ Q_end=.25
 n_iter_P=31;
 P_start=-.015
 P_end=.015
-t_end=1e3
+t_end=1e4
 #create an empty list to store dH
 H_differences=zeros(0)
 #julia's version of linspace
@@ -47,10 +58,10 @@ mat"axis([ -.03,.03,-.4,.4 ])"
 for j=1:n_iter_P
     for k=1:n_iter_Q
         Q,P,dH=PSS_function(ArrQ[k], ArrP[j], Energy, t_end, max_hit)
-        if dH<5e-12 #make sure dH is ok
+        if dH<5e-5 #make sure dH is ok
 
             #push new dH to list
-            push!(H_differences,dH)
+            # push!(H_differences,dH)
             #choose new color
             current_color=COLOR[mod(k,length(COLOR))+1]
 
@@ -59,11 +70,8 @@ for j=1:n_iter_P
             P_PSS=vcat(P)
             # Qy=A[2,:];
             # Px=A[4,:];
-
-            # mat"plot($P_PSS,$Q_PSS,'.','MarkerSize',.1,'color',$current_color); hold on;"
-            mat"plot($P_PSS,$Q_PSS,'k.','MarkerSize',.1); hold on;"
-
-            # plot(P_PSS,Q_PSS,color=current_color,".",markersize=1, markeredgewidth=.1)
+            mat"plot($P_PSS,$Q_PSS,'.','MarkerSize',.1,'color',$current_color); hold on;"
+            # mat"plot($P_PSS,$Q_PSS,'k.','MarkerSize',.1); hold on;"
         end
     end
 end
