@@ -1,11 +1,4 @@
-
-
-
-@everywhere H_test(u)=( (u[3]-u[1])^2+(u[2]-u[4])^2 )*( (u[3]+u[1])^2+(u[2]+u[4])^2 )/ ((u[2]^4+2*u[2]^2*(u[1]^2-1)+(1+u[1]^2)^2 )*(u[3]^4+2*u[3]^2*(u[4]^2+1)+(u[4]^2-1)^2 ))
-
-
-
-@everywhere function is_it_exit(u0,H,tol)
+ function is_it_exit(u0,H,tol)
     prob = ODEProblem(Eq_of_M,u0,(0.,10.))
     sol=solve(prob, RK4(),reltol=1e-5,abstol=1e-7)
     A=sol[:,:]

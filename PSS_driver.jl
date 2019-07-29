@@ -1,11 +1,12 @@
-include("PSS_function.jl")
 using ProgressMeter
 using MATLAB
+include("PSS_function.jl")
 
 
 
 # H=range(.12,stop=0.144281,length=211);
-H=[0.112,.1251, .135]
+H=[0.112012,.125789, .135]
+H=.13
 max_hit=1000
 @showprogress 1 "Computing..." for Energy in H
 
@@ -34,10 +35,10 @@ println(file_name)
 # P_end=2
 # t_end=1000
 
-n_iter_Q=30;
+n_iter_Q=5;#50
 Q_start=-.25
 Q_end=.25
-n_iter_P=31;
+n_iter_P=5;#51
 P_start=-.015
 P_end=.015
 t_end=1e4
