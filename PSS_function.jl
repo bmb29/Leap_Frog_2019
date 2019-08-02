@@ -1,7 +1,7 @@
 using Roots
 using DifferentialEquations
 using Printf
-using YfindNP
+include("YfindNP.jl")
 #equations used for describing motion and conserved quantities
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
@@ -58,13 +58,12 @@ function PSS_function(Q,P, Energy,  t_end,    max_hit)
 
     #for a given Q,P,H with X=0
     Y=YfindNP(Q,P,H)
-    if ~isempty(Y) && Y>0
-
+    if ~isempty(Y)
         u0=zeros(5)
         u0[1]=0 #X
         u0[2]=P #P
         u0[3]=Q #Q
-        u0[4]=Y #Y
+        u0[4]=Y[1] #Y
         u0[5]=0 # counter variable
 
         #constructor for ODE
