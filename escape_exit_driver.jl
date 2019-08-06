@@ -6,8 +6,8 @@ include("escape_exit_function.jl")
 
 max_hit=5
 t_end=1e3
-n_iter_P=1000
-n_iter_Q=1001
+n_iter_P=500
+n_iter_Q=501
 width=2.5
 height=1.5
 ArrP=range(-width,stop=width,length=n_iter_P)

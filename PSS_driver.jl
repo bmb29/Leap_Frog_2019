@@ -5,9 +5,8 @@ include("PSS_function.jl")
 
 
 
-H=range(.11,stop=0.15,length=631);
-
-max_hit=1000
+H=range(.11,stop=0.15,length=3);
+max_hit=100
 @showprogress 1 "Computing..." for Energy in H
 
 mat"""
@@ -22,8 +21,9 @@ set(gcf, 'Position',  [0, 0, 1500, 1000])
 # set(gca,'YColor','none')
 # set(gca,'XColor','none')
 # set(gca,'YColor','none')
-location="~/Desktop/PSS_MOVIE/"
-h=replace(@sprintf("%.15f",Energy),"."=>"_")
+# location="~/Desktop/PSS_MOVIE/"
+location="~/MATLAB-Drive/PSS_LEAP_FROG_CENTER/"
+h=replace(@sprintf("%.7f",Energy),"."=>"_")
 file_name=location*h*".fig"
 println(file_name)
 
@@ -35,10 +35,10 @@ println(file_name)
 # P_end=2
 # t_end=1000
 
-n_iter_Q=30;#50
+n_iter_Q=10;#50
 Q_start=-.25
 Q_end=.25
-n_iter_P=31;#51
+n_iter_P=11;#51
 P_start=-.015
 P_end=.015
 t_end=1e3
@@ -76,5 +76,6 @@ for j=1:n_iter_P
         end
     end
 end
-mat"savefig($file_name),close"
+mat"savefig($file_name)"
+mat"close"
 end
