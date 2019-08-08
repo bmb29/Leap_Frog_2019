@@ -22,7 +22,7 @@ tol=BigFloat("1e-100")
 u0=[BigFloat("1"),BigFloat("0")]
 prob = ODEProblem(Flo,u0,tspan)
 
-t,u=taylorinteg(Flo,u0, tspan[1],tspan[2],50,1e-80, maxsteps=1_000_000_000)
+t,u=taylorinteg(Flo,u0, tspan[1],tspan[2],80,1e-80, maxsteps=1_000_000_000)
 # t,u1=solve(prob, Feagin14(),reltol=relT,abstol=absT,maxiters=1e20)
 diff=sqrt((u[end,1]-u0[1])^2+(u[end,2]-u0[2])^2)
 # diff=sqrt((u1[1,end]-u1[1,1])^2+(u1[2,end]-u1[2,1])^2)
