@@ -7,6 +7,7 @@ pygui(:qt)
 using PyPlot
 pygui(true)
 
+include("YfindNP.jl")
 
 Energy=.25
 Energy=0.1251;
@@ -51,12 +52,12 @@ end
 
 Q=.1
 P=.1
-Y=Yfind(Q,P,H)
+Y=YfindNP(Q,P,H)
 u0=zeros(5)
 u0[1]=0 #X
 u0[2]=P #P
 u0[3]=Q #Q
-u0[4]=Y #Y
+u0[4]=Y[1] #Y
 u0[5]=0
 TEST1_0=H_test(u0)/H
 
@@ -91,6 +92,8 @@ for k=1:N
     um[4]=A[4,k]
     H_v[k]=H_test(um)/H
 end
+
+
 TEST1_f=H_test(uf)/H
 # figure()
 # plot(1:N, log.(H_v))

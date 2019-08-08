@@ -3,14 +3,14 @@
 using DifferentialEquations
 using Roots
 using PyCall
-include("Yfind.jl")
+include("YfindBIG.jl")
 pygui(:qt)
 using PyPlot
 pygui(true)
 
 
 
-test=a
+
 Energy=BigFloat("0.1249")
 H=(2*Energy)^2
 t_end=100
@@ -50,7 +50,7 @@ end
 
 Q=BigFloat(".1")
 P=BigFloat(".1")
-Y=Yfind(Q,P,H)
+Y=YfindBIG(Q,P,H)
 u0=zeros(4)
 u0[1]=0 #X
 u0[2]=P #P
