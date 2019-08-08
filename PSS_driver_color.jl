@@ -8,7 +8,7 @@ include("PSS_function.jl")
 # H=range(.11,stop=0.145,length=107)
 Energy=0.112012
 # Energy=.125789
-Energy=.135
+Energy=.1311
 # @showprogress 1 "Computing..." for Energy in H
 
 mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;pbaspect([1.4 1 1]);"
@@ -28,12 +28,12 @@ file_name=location*h*".fig"
 println(file_name)
 mat"axis([ -.025,.025,-.3,.3 ])"
 
-n_iter_Q=31#50
+n_iter_Q=401#50
 Q_end=.3
 n_iter_P=n_iter_Q;#51
 P_end=.025
-t_end=3e3
-max_hit=5000
+t_end=1e5
+global max_hit=100000
 #create an empty list to store dH
 H_differences=zeros(0)
 #julia's version of linspace
@@ -53,7 +53,7 @@ COLOR=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" 
     P=vcat(P1,P2)
     current_color=COLOR[mod(2*j,length(COLOR))+1]
     mat"plot($P,$Q,'.','MarkerSize',.1,'color',$current_color); "
-    if true
+    if false
         Q3,P3,dH=PSS_function(0,ArrP[j], Energy, t_end, max_hit)
         Q4,P4,dH=PSS_function(0,-ArrP[j], Energy, t_end, max_hit)
         Q_2=vcat(Q3,Q4)
@@ -66,7 +66,7 @@ COLOR=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" 
 end
 
 
-n_iter_Q=13;#50
+n_iter_Q=101;#50
 Q_start=-.3
 Q_end=.3
 n_iter_P=n_iter_Q;#51
