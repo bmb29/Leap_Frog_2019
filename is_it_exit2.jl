@@ -1,4 +1,4 @@
-function is_it_exit2(A,H,tol)
+@everywhere function is_it_exit2(A,H,tol)
     Z=A[1]+im *A[2]
     W=A[3]+im *A[4]
     h=1/(2*H)

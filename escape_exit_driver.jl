@@ -6,15 +6,16 @@ include("escape_exit_function.jl")
 
 max_hit=5
 t_end=1e3
-n_iter_P=500
-n_iter_Q=501
-width=2.5
-height=1.5
+n_iter_P=2000
+n_iter_Q=1001
+width=2
+height=1
 ArrP=range(-width,stop=width,length=n_iter_P)
 ArrQ=range(-height,stop=height,length=n_iter_Q)
 location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
-H=range(.15,stop=0.3,length=10)
-Energy=.25
+H=range(.2+2//30,stop=0.3+2//30,length=10)
+
+@showprogress 1 "Computing..." for Energy in H
 Q_0=zeros(0)
 P_0=zeros(0)
 
@@ -80,4 +81,4 @@ mat"plot($P_4,$Q_4 ,'c.','MarkerSize',$size)"
 mat"plot($P_5,$Q_5 ,'y.','MarkerSize',$size)"
 mat"savefig($file_name)"
 mat"close"
-# end
+ end

@@ -1,15 +1,18 @@
 using Distributed
-@everywhere using DelimitedFiles
+# @everywhere using DelimitedFiles
 @everywhere using DifferentialEquations
 @everywhere using ProgressMeter
+@everywhere using MATLAB
+@everywhere using Printf
 
 include("BASIN_PSS_function_parallel.jl")
-@everywhere using PyCall
-pygui(:qt)
-@everywhere using PyPlot
-pygui(true)
 
-@everywhere max_hit=30
+# @everywhere using PyCall
+# pygui(:qt)
+# @everywhere using PyPlot
+# pygui(true)
+
+@everywhere max_hit=5
 @everywhere Energy=.25
 @everywhere Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 @everywhere ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
@@ -83,6 +86,12 @@ P_5=zeros(0)
 @everywhere ArrP=P_start: delta_P:P_end
 @everywhere ArrQ=Q_start: delta_Q: Q_end
 
+Energy=.25
+location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
+h=replace(@sprintf("%.13f",Energy),"."=>"_")
+file_name=location*"Escape_"*h*".fig"
+
+
 T=@showprogress pmap(BASIN_PSS_function_parallel,1:N)
 for i=1:N
     Q=ArrQ[Int(ceil(i/n_iter_Q))]
@@ -112,60 +121,13 @@ for i=1:N
     end
 end
 
-figure()
-# axis([ -.6, .6,-1.1, 1.1])
-axis([ -2.5, 2.5,-1.5, 1.5])
-
-plot(P_bound,Q_bound ,color="k",".",markersize=2, markeredgewidth=.1)
-
-T0=hcat(Q_0,P_0)
-plot(P_0,Q_0 ,color="r",".",markersize=2, markeredgewidth=.1)
-
-T1=hcat(Q_1,P_1)
-plot(P_1,Q_1 ,color="b",".",markersize=2, markeredgewidth=.1)
-
-T2=hcat(Q_2,P_2)
-plot(P_2,Q_2 ,color="g",".",markersize=2, markeredgewidth=.1)
-
-T3=hcat(Q_3,P_3)
-plot(P_3,Q_3 ,color="m",".",markersize=2, markeredgewidth=.1)
-
-T4=hcat(Q_4,P_4)
-plot(P_4,Q_4 ,color="c",".",markersize=2, markeredgewidth=.1)
-
-T5=hcat(Q_5,P_5)
-plot(P_5,Q_5 ,color="y",".",markersize=2, markeredgewidth=.1)
-#
-# outfile_0 = "ParVern9_outfile0_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_1 = "ParVern9_outfile1_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_2 = "ParVern9_outfile2_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_3 = "ParVern9_outfile3_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_4 = "ParVern9_outfile4_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_5 = "ParVern9_outfile5_"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-# outfile_bound = "ParVern9_outfile1_bound"*string(Energy)*"_nP_"*string(n_iter_P)*"_nQ_"*string(n_iter_Q)*".dat"
-#
-#
-# a = open(outfile_0, "w")
-# b = open(outfile_1, "w")
-# c = open(outfile_2, "w")
-# d = open(outfile_3, "w")
-# e = open(outfile_4, "w")
-# f = open(outfile_5, "w")
-# g = open(outfile_bound, "w")
-#
-# writedlm(outfile_0, T0)
-# writedlm(outfile_1, T1)
-# writedlm(outfile_2, T2)
-# writedlm(outfile_3, T3)
-# writedlm(outfile_4, T4)
-# writedlm(outfile_5, T5)
-# writedlm(outfile_bound, Tbound)
-#
-#
-# close(a)
-# close(b)
-# close(c)
-# close(d)
-# close(e)
-# close(f)
-# close(g)
+mat"figure(); hold on;"
+mat"axis([ -$width,$width,-$height,$height ])"
+# mat"plot($P_bound,$Q_bound ,'k.','MarkerSize',10)"
+mat"plot($P_0,$Q_0 ,'b.','MarkerSize',$size)"
+mat"plot($P_1,$Q_1 ,'r.','MarkerSize',$size)"
+mat"plot($P_2,$Q_2 ,'g.','MarkerSize',$size)"
+mat"plot($P_4,$Q_4 ,'c.','MarkerSize',$size)"
+mat"plot($P_5,$Q_5 ,'y.','MarkerSize',$size)"
+mat"savefig($file_name)"
+mat"close"

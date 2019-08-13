@@ -66,7 +66,7 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
             uf[5]=0
             dH=abs(H_test(uf)-H)
             #
-            if dH<1e-5
+            if dH<1e-10
                 if is_it(uf,H,tol_dist)
                     return sol.u[end][5]
                 else

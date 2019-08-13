@@ -23,7 +23,7 @@ include("is_it.jl")
     Q=ArrQ[Int(ceil(K/n_iter_Q))]
     P=ArrP[mod(K,n_iter_P)+1]
 
-    max_hit=11
+    max_hit=5
     Energy=.25
     t_end=1000
     tol_dist=1e-5
