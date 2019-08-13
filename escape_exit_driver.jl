@@ -13,7 +13,7 @@ height=1
 ArrP=range(-width,stop=width,length=n_iter_P)
 ArrQ=range(-height,stop=height,length=n_iter_Q)
 location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
-H=range(.2+2//30,stop=0.3+2//30,length=10)
+H=range(.2,stop=0.22,length=21)
 
 @showprogress 1 "Computing..." for Energy in H
 Q_0=zeros(0)
@@ -38,8 +38,7 @@ P_5=zeros(0)
 
 h=replace(@sprintf("%.13f",Energy),"."=>"_")
 file_name=location*"Escape_"*h*".fig"
-
-@showprogress 1 "Computing..." for j=1:n_iter_P
+for j=1:n_iter_P
     for k=1:n_iter_Q
         K=escape_exit_function(ArrQ[k],ArrP[j], Energy, t_end, max_hit)
         if K==0
