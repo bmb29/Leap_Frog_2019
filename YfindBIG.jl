@@ -14,8 +14,8 @@ using Roots
 function YfindBIG(Q,P,H)
     Y_find1(y)=Hamil(BigFloat("0"),y,Q,P)-H
     try
-        Y=find_zero(Y_find1,BigFloat(".1"), maxeval=100,maxfnevals=300,tol=1e-18)
+        Y=find_zero(Y_find1,BigFloat(".1"), maxeval=100,maxfnevals=300,tol=1e-15)
      catch
-        Y=zeros(BigFloat ,0)
+        Y=zeros(0)
     end
 end

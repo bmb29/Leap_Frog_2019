@@ -6,16 +6,19 @@ include("escape_exit_function.jl")
 
 max_hit=5
 t_end=1e3
-n_iter_P=2000
-n_iter_Q=1001
-width=2
+n_iter_P=1000
+n_iter_Q=2001
+width=.7
 height=1
 ArrP=range(-width,stop=width,length=n_iter_P)
 ArrQ=range(-height,stop=height,length=n_iter_Q)
 location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
-H=range(.2,stop=0.22,length=21)
+H=range(.21,stop=0.24,length=21)
 
 @showprogress 1 "Computing..." for Energy in H
+
+println(Energy)
+
 Q_0=zeros(0)
 P_0=zeros(0)
 

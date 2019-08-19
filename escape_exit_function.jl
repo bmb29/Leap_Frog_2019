@@ -1,5 +1,5 @@
 
-include("YfindNP.jl")
+include("Yfind.jl")
 include("is_it.jl")
 
 
@@ -46,17 +46,17 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
     P_3=0
 
 
-    Y=YfindNP(Q,P,H)
+    Y=Yfind(Q,P,H)
     if ~isempty(Y)
         u0=zeros(5)
         u0[1]=0 #X
         u0[2]=P #P
         u0[3]=Q #Q
-        u0[4]=Y[1] #Y
+        u0[4]=Y #Y
         u0[5]=0 #Y
         if true
             prob = ODEProblem(Eq_of_M,u0,(0., t_end))
-            # sol=solve(prob,RK4(),reltol=1e-8,abstol=1e-10,callback=cb)
+            # sol=solve(prob,RK4(),reltol=1e-6,abstol=1e-8,callback=cb)
             sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-13,abstol=1e-15,callback=cb)
             uf=zeros(5)
             uf[1]=sol[1,end] #X
@@ -66,7 +66,7 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
             uf[5]=0
             dH=abs(H_test(uf)-H)
             #
-            if dH<1e-10
+            if dH<1e-5
                 if is_it(uf,H,tol_dist)
                     return sol.u[end][5]
                 else
