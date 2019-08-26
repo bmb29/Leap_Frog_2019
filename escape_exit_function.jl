@@ -33,9 +33,6 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
     tol_dist=1e-5
     H=(2*Energy)^2
 
-<<<<<<< HEAD
-    Y=YfindNP(Q,P,H)
-=======
     Q_0=0
     P_0=0
 
@@ -50,7 +47,6 @@ function escape_exit_function(Q,P, Energy, t_end, max_hit)
 
 
     Y=Yfind(Q,P,H)
->>>>>>> 4e7466328b35361e75c673fff08943b1707429d9
     if ~isempty(Y)
         u0=zeros(5)
         u0[1]=0 #X

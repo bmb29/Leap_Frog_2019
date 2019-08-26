@@ -1,4 +1,5 @@
-function is_it(u0,H,tol)
+using Distributed
+@everywhere function is_it(u0,H,tol)
     prob = ODEProblem(Eq_of_M,u0,(0.,10.))
     sol=solve(prob, RK4(),reltol=1e-5,abstol=1e-7)
     A=sol[:,:]

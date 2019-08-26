@@ -4,11 +4,10 @@ include("is_it_exit2.jl")
 include("is_it.jl")
 
 
-@everywhere function escape_exit_function_parallel(Q,P,t_end,Energy)
-    max_hit=5
+@everywhere function escape_exit_function_parallel(mesh_list,t_end,Energy)
+    Q=mesh_list[1]; P=mesh_list[2];
     H=(2*Energy)^2
     tol_dist=1e-5
-
     Y=Yfind(Q,P,H)
     if ~isempty(Y)
         u0=zeros(5)
@@ -28,16 +27,13 @@ include("is_it.jl")
         uf[4]=sol[4,end] #Y
         uf[5]=0
         dH=abs(H_test(uf)-H)
-        #
-        if dH<1e-10
-            B=hcat(sol.u[end-10],sol.u[end])'
-            if is_it_exit2(B,H,tol_dist) && is_it_exit(sol.u[end],H,tol_dist)
+        if dH<1e-5
+            if is_it(uf,H,tol_dist)
                 return sol.u[end][5]
             else
                 return -1
             end
         end
     end
-end
 return -2
 end
