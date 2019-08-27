@@ -1,27 +1,13 @@
 using Distributed
-addprocs()
-
-@everywhere function f(k,b,c)
-     workernum = myid() - 1
-     sleep(workernum)
-     println("job $k")
-    return b*[k k^2; k^2 k]+c*[1 1; 1 1]
-
-end
-
-
-
-
-n_iter_Q=10;#50
-Q_start=-.25
-Q_end=.25
-n_iter_P=10;#51
-P_start=-.015
-P_end=.015
-
-
-ArrP=range(P_start,stop=P_end,length=n_iter_P)
-ArrQ=range(Q_start,stop=Q_end,length=n_iter_Q)
-E=ones(6)*.5
-A=[1,2,3,4,5,6]; B=[2,3,4,5,6,7]
-pmap(f,A,B,E)
+addprocs(3)
+# module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
+module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
+@everywhere thisDir = dirname(@__FILE__())
+@everywhere any(path -> path == thisDir, LOAD_PATH) || push!(LOAD_PATH, thisDir)
+# @everywhere push!(LOAD_PATH, $module_dir)
+@everywhere using par_module
+@everywhere N=1000
+@everywhere E=ones(N)*.5
+@everywhere A=1:N;
+@everywhere B=A+ones(N)
+pmap(par_module.f,A,B,E)
