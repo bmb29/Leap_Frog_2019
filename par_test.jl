@@ -1,3 +1,5 @@
+using Pkg; Pkg.activate(".")
+
 using Distributed
 addprocs(3)
 # module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
@@ -5,7 +7,10 @@ module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
 @everywhere thisDir = dirname(@__FILE__())
 @everywhere any(path -> path == thisDir, LOAD_PATH) || push!(LOAD_PATH, thisDir)
 # @everywhere push!(LOAD_PATH, $module_dir)
+include("par_module.jl")
+import Roots
 @everywhere using par_module
+@everywhere using Roots
 @everywhere N=1000
 @everywhere E=ones(N)*.5
 @everywhere A=1:N;
