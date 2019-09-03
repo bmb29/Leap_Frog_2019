@@ -104,7 +104,7 @@ axis([ -.025, .025,-.25, .25]) #around E=0.1257895
                         # sol=solve(prob, RK4(),maxiters=1e20,reltol=1e-6,abstol=1e-8,callback=cb,save_start=true,save_end=true,save_everystep=false)
                         # plot(A[3,:],-A[2,:],color=current_color,",")
                         #testing if energy is conserved at end?
-                        A=sol[:,:]
+                       A =sol[:,:]
                         #values at end to check if energy is coservered
 
                         #save hit points

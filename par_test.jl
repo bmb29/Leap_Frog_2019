@@ -1,18 +1,16 @@
-using Pkg; Pkg.activate(".")
+# using Distributed
+# addprocs(1)
+ include("par_module.jl")
 
-using Distributed
-addprocs(3)
-# module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
-module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
-@everywhere thisDir = dirname(@__FILE__())
-@everywhere any(path -> path == thisDir, LOAD_PATH) || push!(LOAD_PATH, thisDir)
-# @everywhere push!(LOAD_PATH, $module_dir)
-include("par_module.jl")
-import Roots
-@everywhere using par_module
-@everywhere using Roots
-@everywhere N=1000
-@everywhere E=ones(N)*.5
-@everywhere A=1:N;
-@everywhere B=A+ones(N)
-pmap(par_module.f,A,B,E)
+
+ @everywhere begin
+    include("par_module.jl")
+    push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
+    using .par_module
+    N = 1000
+    E = ones(N) * .5
+    A = 1:N;
+    B = A + ones(N)
+end
+
+pmap(par_module.f, A, B, E)

@@ -1,14 +1,15 @@
-#
+
 module escape
 export escape_exit_function_parallel
-using MATLAB
 using DifferentialEquations
 using Roots
+using ProgressMeter
+using Printf
+using MATLAB
 include("is_it.jl")
 max_hit=5
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 H_test(u)=( (u[3]-u[1])^2+(u[2]-u[4])^2 )*( (u[3]+u[1])^2+(u[2]+u[4])^2 )/ ((u[2]^4+2*u[2]^2*(u[1]^2-1)+(1+u[1]^2)^2 )*(u[3]^4+2*u[3]^2*(u[4]^2+1)+(u[4]^2-1)^2 ))
-
 ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
 ODE1(z,w)=conj(  im * w.*( 1 ./(z.^2-w.^2)+1 ./(1+w.^2) ))
 function Eq_of_M(du,u,p,t)
@@ -19,14 +20,17 @@ function Eq_of_M(du,u,p,t)
     du[5]=0
     return
 end
+
 condition(u,t,integrator)= u[5]>max_hit
 function condition2(u,t,integrator) # Event when event_f(u,t) == 0
     u[1]
 end
 affect!(integrator) = terminate!(integrator)
+
 function affect2!(integrator)
     integrator.u[5]=integrator.u[5]+1
 end
+
 cb2 = ContinuousCallback(condition2,affect2!,nothing)
 cb1 = DiscreteCallback(condition,affect!)
 cb=CallbackSet(cb2,cb1)
@@ -35,15 +39,15 @@ cb=CallbackSet(cb2,cb1)
 function Yfind(Q,P,H)
     Y_find(y)=Hamil(0,y,Q,P)-H
     try
-        Y=find_zero(Y_find,.01,maxeval=100,maxfnevals=300,tol=1e-15)
+        Y=find_zeros(Y_find,0,10, maxeval=100,maxfnevals=300,tol=1e-15)
     catch
         Y=zeros(0)
     end
 end
 
-function escape_exit_function_parallel(mesh_list,t_end,Energy)
+function escape_exit_function_parallel(mesh_list,t_end,Energy_A)
     Q=mesh_list[1]; P=mesh_list[2];
-    H=(2*Energy)^2
+    H=(2*Energy_A)^2
     tol_dist=1e-5
     max_hit=5
     Y=Yfind(Q,P,H)
