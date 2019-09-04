@@ -17,30 +17,33 @@ include("escape.jl")
 
 @everywhere begin
     include("escape.jl")
-    push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
+    # push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
+    push!(LOAD_PATH, "/home/brandon_behring/Desktop/Leap_Frog_2019")
     using ProgressMeter
     using Printf
     using MATLAB
     using .escape
     t_end = 1e3
-    width = 2.5; height = 1.25
-    n_iter_Q = 20;n_iter_P = 40;N = n_iter_P * n_iter_Q;
+    width = 3; height = 1.5
+    n_iter_Q = 4000;n_iter_P = 8000;N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
     mesh = [(Q, P) for Q in ArrQ, P in ArrP]
     mesh_list = reshape(mesh, 1, :)
     t_end = t_end * ones(N);
-    H=range(.21,stop=0.24,length=2) 
-    location = "/Users/brandonbehring/Desktop/"
-    count=1
-    end
+    H = range(.24, stop = 0.3, length = 20) 
+    location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
 
-    while count<=length(H)
-        println(count)
-        println(H[count])
-    @everywhere Energy = H[count]* ones(N)
-    @everywhere h=replace(@sprintf("%.13f",H[count]),"."=>"_")
-    @everywhere file_name=location*"Escape_"*h*".fig"
+    count = 1
+end
+
+while count <= length(H)
+    println(count)
+    println(H[count])
+    @everywhere Energy = H[count] * ones(N)
+    @everywhere h = replace(@sprintf("%.13f",H[count]), "." => "_")
+    @everywhere file_name = location * "Escape_" * h * ".fig"
+    println(file_name)
     num_until_exit = @showprogress pmap(escape.escape_exit_function_parallel, mesh_list, t_end, Energy)
 
     @everywhere begin

@@ -61,7 +61,7 @@ function escape_exit_function_parallel(mesh_list,t_end,Energy_A)
 
         prob = ODEProblem(Eq_of_M,u0,(0., t_end))
         # sol=solve(prob,RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb)
-        sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-8,abstol=1e-10,callback=cb)
+        sol=solve(prob, Vern9(),maxiters=1e10, reltol=1e-13,abstol=1e-15,callback=cb)
         uf=zeros(5)
         uf[1]=sol[1,end] #X
         uf[2]=sol[2,end] #P
