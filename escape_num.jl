@@ -1,81 +1,64 @@
 
-
-# @everywhere module_dir = "/Users/brandonbehring/Desktop/Leap_Frog_2019"
-# @everywhere push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
-# # @everywhere module_dir ="/Users/brandonbehring/Desktop/Leap_Frog_2019"
-# # @everywhere push!(LOAD_PATH, $module_dir)
-# # @everywhere thisDir = dirname(@__FILE__())
-# # @everywhere any(path -> path == thisDir, LOAD_PATH) || push!(LOAD_PATH, thisDir)
-# include("escape.jl")
-# @everywhere using .escape
-using ProgressMeter
+module escape_num
+export escape_exit_num
+using DifferentialEquations
+using Roots
 using Printf
-using MATLAB
-using SharedArrays
-include("escape.jl")
-@everywhere begin
-    include("escape.jl")
-    push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
-    using ProgressMeter
-    using Printf
-    using MATLAB
-    using SharedArrays
-    using .escape
-end
-@everwyehere function escape_num(energy)
+# using MATLAB
+# using ProgressMeter
 
-@everywhere begin
-    # include("escape.jl")
-    # push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
-    # using ProgressMeter
-    # using Printf
-    # using MATLAB
-    # using SharedArrays
-    # using .escape
-    t_end = 1e3
-    width = 2.5; height = 1.25
-    n_iter_Q = 200;n_iter_P = 400;N = n_iter_P * n_iter_Q;
-    ArrP = range(-width, stop = width, length = n_iter_P)
-    ArrQ = range(-height, stop = height, length = n_iter_Q)
-    mesh = [(Q, P) for Q in ArrQ, P in ArrP]
-    mesh_list = reshape(mesh, 1, :)
-    t_end = t_end * ones(N);
-    location = "/Users/brandonbehring/Desktop/"
-    end
-    @everywhere Energy_A = Energy* ones(N)
-    @everywhere h=replace(@sprintf("%.13f",Energy),"."=>"_")
-    @everywhere file_name=location*"Escape_"*h*".fig"
-    num_until_exit = @showprogress pmap(escape.escape_exit_function_parallel, mesh_list, t_end, Energy_A)
-    @everywhere begin
-        Q_0 = zeros(0);P_0 = zeros(0)
-        Q_1 = zeros(0);P_1 = zeros(0)
-        Q_2 = zeros(0);P_2 = zeros(0)
-        Q_3 = zeros(0);P_3 = zeros(0)
-        Q_4 = zeros(0);P_4 = zeros(0)
-        Q_5 = zeros(0);P_5 = zeros(0)
-    end 
-    for i = 1:N
-        Q, P = mesh_list[i]
-        if num_until_exit[i] == 0
-            push!(Q_0, Q)
-            push!(P_0, P)
-        elseif num_until_exit[i] == 1
-            push!(Q_1, Q)
-            push!(P_1, P)
-        elseif num_until_exit[i] == 2
-            push!(Q_2, Q)
-            push!(P_2, P)
-        elseif num_until_exit[i] == 3
-            push!(Q_3, Q)
-            push!(P_3, P)
-        elseif num_until_exit[i] == 4
-            push!(Q_4, Q)
-            push!(P_4, P)
-        elseif num_until_exit[i] == 5
-            push!(Q_5, Q)
-            push!(P_5, P)
+include("is_it.jl")
+include("leap_frog_definitions.jl")
+
+condition_max_hits(u,t,p,integrator)= u[5]>p
+affect_stop!(integrator) = terminate!(integrator)
+
+function condition_hits_PSS(u,t,integrator) # Event when event_f(u,t) == 0
+    u[1]
+end
+function affect_update_iterator!(integrator)
+    integrator.u[5]=integrator.u[5]+1
+end
+
+callback_max_hits=DiscreteCallback(condition_max_hits,affect_stop!)
+callback_hits_PSS_=ContinuousCallback(condition_hits_PSS, affect_update_iterator!,nothing)
+cb=CallbackSet(callback_hits_PSS, callback_max_hits)
+
+
+function escape_exit_num(mesh_list,t_end,Energy_A,max_hit)
+    Q=mesh_list[1]; P=mesh_list[2];
+    H=(2*Energy_A)^2
+    tol_dist=1e-5
+    Y=Yfind(Q,P,H)
+    p=max_hit
+    if ~isempty(Y)
+        u0=zeros(5)
+        u0[1]=0 #X
+        u0[2]=P #P
+        u0[3]=Q #Q
+        u0[4]=Y[1] #Y
+        u0[5]=0 #Y
+        
+        prob = ODEProblem(Eq_of_M,u0,(0., t_end),max_hit,p)
+        # sol=solve(prob,RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb)
+        sol=solve(prob, Vern9(),maxiters=1e20, reltol=1e-13,abstol=1e-15,callback=cb)
+        uf=zeros(5)
+        uf[1]=sol[1,end] #X
+        uf[2]=sol[2,end] #P
+        uf[3]=sol[3,end] #Q
+        uf[4]=sol[4,end] #Y
+        uf[5]=0
+        dH=abs(H_test(uf)-H)
+        if dH<1e-5
+            if is_it(uf,H,tol_dist)
+                return sol.u[end][5]
+            else
+                return -1
+            end
         end
     end
+    return -2
+end
 
-    return Q_0,P_0,Q_1,P_1,Q_2,P_2,Q_3,P_3,Q_4,P_4,Q_5,P_5
+
 end

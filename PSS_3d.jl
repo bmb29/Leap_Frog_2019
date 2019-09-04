@@ -10,17 +10,19 @@ pygui(true)
 include("YfindNP.jl")
 
 Energy=.25
-Energy=0.1251;
-Energy=0.1249;
+# Energy=0.1251;
+# Energy=0.1249;
 H=(2*Energy)^2
 h=sqrt(H)
-t_end=1000
-barrier=20
-Max_hit=500
+t_end=10000
+barrier=2000
+max_hit=500
+
+
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 H_test(u)=( (u[3]-u[1])^2+(u[2]-u[4])^2 )*( (u[3]+u[1])^2+(u[2]+u[4])^2 )/ ((u[2]^4+2*u[2]^2*(u[1]^2-1)+(1+u[1]^2)^2 )*(u[3]^4+2*u[3]^2*(u[4]^2+1)+(u[4]^2-1)^2 ))
 
-condition(u,t,integrator)= u[5]>Max_hit || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>barrier
+condition(u,t,p,integrator)= u[5]>p[1] || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>p[2]
 function condition2(u,t,integrator) # Event when event_f(u,t) == 0
  u[1]
 end
@@ -60,11 +62,14 @@ u0[3]=Q #Q
 u0[4]=Y[1] #Y
 u0[5]=0
 TEST1_0=H_test(u0)/H
-
-prob = ODEProblem(Eq_of_M,u0,(0., t_end))
+p=zeros(2)
+p[1]=max_hit
+p[2]=barrier
+prob = ODEProblem(Eq_of_M,u0,(0., t_end),p)
 # t,A=solve(prob, RK4(),reltol=1e-15,abstol=1e-16,maxiters=1e15)
+
+sol=solve(prob, Vern9(),reltol=1e-13,abstol=1e-15,maxiters=1e20,callback=cb)
 figure()
-sol=solve(prob, Vern9(),reltol=1e-14,abstol=1e-16,maxiters=1e20,callback=cb)
 # =1e-16,
 # figure()
 A=sol[:,:]
