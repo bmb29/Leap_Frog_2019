@@ -24,7 +24,8 @@ include("escape_num.jl")
     using MATLAB
     using .escape_num
     t_end = exp(7)
-    width = sqrt(3); height = 1
+    # width = sqrt(3); height = 1
+    width = .01; height = .3
     n_iter_Q = 80;n_iter_P = 160;N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
@@ -37,7 +38,7 @@ include("escape_num.jl")
     max_hits=100*ones(n_iter_Q,n_iter_P);
     # max_hits=5*ones(N);
 
-    H=.25
+    H=.13
     # location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
     location = "/Users/brandonbehring/Desktop/"
 end

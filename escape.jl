@@ -10,7 +10,7 @@ include("is_it.jl")
 include("leap_frog_definitions.jl")
 
 
-condition(u,t,p,integrator)= u[5]>p
+condition(u,t,integrator)= u[5]>5
 function condition2(u,t,integrator) # Event when event_f(u,t) == 0
     u[1]
 end
@@ -25,29 +25,21 @@ cb1=DiscreteCallback(condition,affect!)
 cb=CallbackSet(cb2,cb1)
 
 
-function Yfind(Q,P,H)
-    Y_find(y)=Hamil(0,y,Q,P)-H
-    try
-        Y=find_zeros(Y_find,0,10, maxeval=100,maxfnevals=300,tol=1e-15)
-    catch
-        Y=zeros(0)
-    end
-end
-
-function escape_exit_function_parallel(mesh_list,t_end,Energy_A,max_hit)
+function escape_exit_function_parallel(mesh_list,t_end,Energy_A)
     Q=mesh_list[1]; P=mesh_list[2];
     H=(2*Energy_A)^2
     tol_dist=1e-5
     Y=Yfind(Q,P,H)
+    print(Y)
     if ~isempty(Y)
         u0=zeros(5)
         u0[1]=0 #X
         u0[2]=P #P
         u0[3]=Q #Q
-        u0[4]=Y[1] #Y
+        u0[4]=Y #Y
         u0[5]=0 #Y
 
-        prob = ODEProblem(Eq_of_M,u0,(0., t_end),max_hit)
+        prob = ODEProblem(Eq_of_M,u0,(0., t_end))
         # sol=solve(prob,RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb)
         sol=solve(prob, Vern9(),maxiters=1e20, reltol=1e-13,abstol=1e-15,callback=cb)
         uf=zeros(5)
