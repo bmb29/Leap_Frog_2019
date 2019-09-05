@@ -15,14 +15,14 @@ Energy=.25
 H=(2*Energy)^2
 h=sqrt(H)
 t_end=10000
-barrier=2000
+barrier=20
 max_hit=500
 
 
 Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
 H_test(u)=( (u[3]-u[1])^2+(u[2]-u[4])^2 )*( (u[3]+u[1])^2+(u[2]+u[4])^2 )/ ((u[2]^4+2*u[2]^2*(u[1]^2-1)+(1+u[1]^2)^2 )*(u[3]^4+2*u[3]^2*(u[4]^2+1)+(u[4]^2-1)^2 ))
 
-condition(u,t,p,integrator)= u[5]>p[1] || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>p[2]
+condition(u,t,integrator)= u[5]>p[1] || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>p[2]
 function condition2(u,t,integrator) # Event when event_f(u,t) == 0
  u[1]
 end
