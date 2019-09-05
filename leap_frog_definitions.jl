@@ -14,10 +14,11 @@ function Eq_of_M(du,u,p,t)
 end
 
 function Yfind(Q,P,H)
-    Y_find(y)=Hamil(0,y,Q,P)-H
     try
-        Y=find_zeros(Y_find,0,10, maxeval=100,maxfnevals=300,tol=1e-15)
-    catch
+        Y=sqrt( (1+(-1)*H*((-1)+P^2)^2)^(-1)*(P^2+(-1)*Q^2+H*((-1)+P^2) 
+        ^2*((-1)+Q^2)+sqrt(H*((-1)+P^2)^4+(-4)*((-1)+H*((-1)+P^2)^2) 
+        *((-1)*P^2+H*((-1)+P^2)^2)*Q^2 ))   )
+     catch
         Y=zeros(0)
     end
 end

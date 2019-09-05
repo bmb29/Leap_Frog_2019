@@ -13,7 +13,7 @@ using ProgressMeter
 using Printf
 using MATLAB
 include("escape_num.jl")
-ty
+
 
 @everywhere begin
     include("escape_num.jl")
@@ -23,15 +23,20 @@ ty
     using Printf
     using MATLAB
     using .escape_num
-    t_end = 1e3
-    width = 1; height = 1
-    n_iter_Q = 80;n_iter_P = 80;N = n_iter_P * n_iter_Q;
+    t_end = exp(7)
+    width = sqrt(3); height = 1
+    n_iter_Q = 80;n_iter_P = 160;N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
-    mesh = [(Q, P) for Q in ArrQ, P in ArrP]
+    mesh_P=[P for Q in ArrQ, P in ArrP]
+    mesh_Q=[Q for Q in ArrQ, P in ArrP]
+    mesh = [(P, Q) for Q in ArrQ, P in ArrP]
     mesh_list = reshape(mesh, 1, :)
     t_end = t_end * ones(n_iter_Q,n_iter_P);
-    max_hits=5*ones(n_iter_Q,n_iter_P);
+    # t_end = t_end * ones(N);
+    max_hits=100*ones(n_iter_Q,n_iter_P);
+    # max_hits=5*ones(N);
+
     H=.25
     # location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
     location = "/Users/brandonbehring/Desktop/"
@@ -39,10 +44,12 @@ end
 
 
     @everywhere Energy = H* ones(n_iter_Q,n_iter_P);
+    # @everywhere Energy = H* ones(N);
+
     @everywhere h = replace(@sprintf("%.13f",H), "." => "_")
     @everywhere file_name = location * "Escape_" * h * ".fig"
     println(file_name)
-    num_until_exit = @showprogress map(escape_num.escape_exit_num, mesh, t_end, Energy,max_hits)
+    num_until_exit = @showprogress pmap(escape_num.escape_exit_num, mesh, t_end, Energy, max_hits)
 
     # @everywhere begin
     #     Q_0 = zeros(0);P_0 = zeros(0)
@@ -74,16 +81,19 @@ end
     #         push!(Q_5, Q)
     #         push!(P_5, P)
     #     end
-    # end
-    m2=transpose(mesh)
+    # # end
+    # m2=transpose(mesh)
+    logz=log1p.(num_until_exit)
     mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;"
-    # mat"plot($P_0,$Q_0 ,'b.','MarkerSize',3)"
-    # mat"plot($P_1,$Q_1 ,'r.','MarkerSize',3)"
-    # mat"plot($P_2,$Q_2 ,'g.','MarkerSize',3)"
-    # mat"plot($P_4,$Q_4 ,'c.','MarkerSize',3)"
-    # mat"plot($P_5,$Q_5 ,'y.','MarkerSize',3)"
-    mat"surf($mesh, $mesh' , $num_until_exit)"
-    # mat"axis([ -$width,$width,-$height,$height ])"
-    mat"axis([ -1,1,-1,1])"
-    mat"savefig($file_name)"
+    # # mat"plot($P_0,$Q_0 ,'b.','MarkerSize',3)"
+    # # mat"plot($P_1,$Q_1 ,'r.','MarkerSize',3)"
+    # # mat"plot($P_2,$Q_2 ,'g.','MarkerSize',3)"
+    # # mat"plot($P_4,$Q_4 ,'c.','MarkerSize',3)"
+    # # mat"plot($P_5,$Q_5 ,'y.','MarkerSize',3)"
+    mat"imagesc([-2.5,2.5],[-1.5,1.5],$logz)"
+    mat"colorbar"
+
+    # # mat"axis([ -$width,$width,-$height,$height ])"
+    # mat"axis([ -1,1,-1,1])"
+    # mat"savefig($file_name)"
 

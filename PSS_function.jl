@@ -1,22 +1,8 @@
 using Roots
 using DifferentialEquations
 using Printf
-include("YfindNP.jl")
+include("leap_frog_definitions.jl")
 #equations used for describing motion and conserved quantities
-Hamil(XX,YY,QQ,PP)=( (QQ-XX)^2+(PP-YY)^2 )*( (QQ+XX)^2+(PP+YY)^2 )/((PP^4+2*PP^2*(XX^2-1)+(1+XX^2)^2 )*(QQ^4+2*QQ^2*(YY^2+1)+(YY^2-1)^2 ))
-ODE2(z,w)=conj(  im * z.*( 1 ./(w.^2-z.^2)+1 ./(1+z.^2) ))
-ODE1(z,w)=conj(  im * w.*( 1 ./(z.^2-w.^2)+1 ./(1+w.^2) ))
-H_test(u)=( (u[3]-u[1])^2+(u[2]-u[4])^2 )*( (u[3]+u[1])^2+(u[2]+u[4])^2 )/ ((u[2]^4+2*u[2]^2*(u[1]^2-1)+(1+u[1]^2)^2 )*(u[3]^4+2*u[3]^2*(u[4]^2+1)+(u[4]^2-1)^2 ))
-
-function Eq_of_M(du,u,p,t)
-    du[1]=real(ODE1(u[1]+im*u[2],u[3]+im*u[4]))
-    du[2]=imag(ODE1(u[1]+im*u[2],u[3]+im*u[4]))
-    du[3]=real(ODE2(u[1]+im*u[2],u[3]+im*u[4]))
-    du[4]=imag(ODE2(u[1]+im*u[2],u[3]+im*u[4]))
-    du[5]=0
-return
-end
-
 
 #condition for when to stop integrating if we hit the PSS enough times
 condition1(u,t,integrator)= u[5]>max_hit
@@ -57,13 +43,14 @@ function PSS_function(Q,P, Energy,  t_end,    max_hit)
     H=(2*Energy)^2
 
     #for a given Q,P,H with X=0
-    Y=YfindNP(Q,P,H)
+    Y=Yfind(Q,P,H)
+    
     if ~isempty(Y)
         u0=zeros(5)
         u0[1]=0 #X
         u0[2]=P #P
         u0[3]=Q #Q
-        u0[4]=Y[1] #Y
+        u0[4]=Y #Y
         u0[5]=0 # counter variable
 
         #constructor for ODE

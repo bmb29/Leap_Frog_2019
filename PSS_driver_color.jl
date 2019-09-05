@@ -29,14 +29,15 @@ COLOR=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" 
 println(file_name)
 mat"axis([ -2.5, 2.5,-1.5, 1.5])"
 #defining colors for PSS
-N_iter_Q=100;#50
-Q_start=-1
-Q_end=1
-N_iter_P=100
-P_start=-2.5
-P_end=2.5
-t_end=1e4
-max_hit=10000
+N_iter_Q=10;#50
+Q_start=-.3
+Q_end=.3
+N_iter_P=10
+P_start=-.01
+P_end=.01
+t_end=1e3
+max_hit=1000
+mat"axis([ $P_start, $P_end, $Q_start, $Q_end])"
 #create an empty list to store dH
 H_differences=zeros(0)
 #julia's version of linspace
@@ -44,8 +45,8 @@ ArrP=range(P_start,stop=P_end,length=N_iter_P)
 ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
 
 @showprogress 1 "Computing..." for k=1:N_iter_P
-        if true
-            Q1,P1,dH=PSS_function(0, ArrP[k], Energy, t_end, max_hit)
+    for j=1:N_iter_Q
+        Q1,P1,dH=PSS_function(ArrQ[j], ArrP[k], Energy, t_end, max_hit)
             # Q2,P2,dH=PSS_function(-ArrQ[k], ArrP[j], Energy, t_end, max_hit)
             # Q3,P3,dH=PSS_function(ArrQ[k], -ArrP[j], Energy, t_end, max_hit)
             # Q4,P4,dH=PSS_function(-ArrQ[k], -ArrP[j], Energy, t_end, max_hit)
@@ -57,8 +58,9 @@ ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
                 current_color=COLOR[mod(k,length(COLOR))+1]
                 mat"plot($P1,$Q1,'.','MarkerSize',.1,'color',$current_color); hold on;"
             end
-        end
+       
     end
+end
 
 #
 mat"savefig($file_name)"
