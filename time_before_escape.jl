@@ -17,16 +17,16 @@ include("escape_num.jl")
 
 @everywhere begin
     include("escape_num.jl")
-    push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
-    # push!(LOAD_PATH, "/home/brandon_behring/Desktop/Leap_Frog_2019")
+    # push!(LOAD_PATH, "/Users/brandonbehring/Desktop/Leap_Frog_2019")
+    push!(LOAD_PATH, "/home/brandon_behring/Desktop/Leap_Frog_2019")
     using ProgressMeter
     using Printf
     using MATLAB
     using .escape_num
-    t_end = exp(7)
-    # width = sqrt(3); height = 1
-    width = .01; height = .3
-    n_iter_Q = 80;n_iter_P = 160;N = n_iter_P * n_iter_Q;
+    t_end = exp(10)
+    width = sqrt(3); height = 1
+    # width = .01; height = .3
+    n_iter_Q = 1000;n_iter_P = Int(round(width/height*n_iter_Q)) ;N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
     mesh_P=[P for Q in ArrQ, P in ArrP]
@@ -38,9 +38,9 @@ include("escape_num.jl")
     max_hits=100*ones(n_iter_Q,n_iter_P);
     # max_hits=5*ones(N);
 
-    H=.13
-    # location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
-    location = "/Users/brandonbehring/Desktop/"
+    H=.25
+    location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
+    # location = "/Users/brandonbehring/Desktop/"
 end
 
 
@@ -48,7 +48,7 @@ end
     # @everywhere Energy = H* ones(N);
 
     @everywhere h = replace(@sprintf("%.13f",H), "." => "_")
-    @everywhere file_name = location * "Escape_" * h * ".fig"
+    @everywhere file_name = location * "time_before_Escape_" * h * ".fig"
     println(file_name)
     num_until_exit = @showprogress pmap(escape_num.escape_exit_num, mesh, t_end, Energy, max_hits)
 
