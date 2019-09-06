@@ -24,8 +24,8 @@ include("escape_num.jl")
     using MATLAB
     using .escape_num
     t_end = exp(10)
-    width = sqrt(3); height = 1
-    # width = .01; height = .3
+    # width = sqrt(3); height = 1
+    width = .01; height = .3
     n_iter_Q = 1000;n_iter_P = Int(round(width/height*n_iter_Q)) ;N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
@@ -38,7 +38,7 @@ include("escape_num.jl")
     max_hits=100*ones(n_iter_Q,n_iter_P);
     # max_hits=5*ones(N);
 
-    H=.25
+    H=.135
     location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
     # location = "/Users/brandonbehring/Desktop/"
 end
@@ -91,10 +91,10 @@ end
     # # mat"plot($P_2,$Q_2 ,'g.','MarkerSize',3)"
     # # mat"plot($P_4,$Q_4 ,'c.','MarkerSize',3)"
     # # mat"plot($P_5,$Q_5 ,'y.','MarkerSize',3)"
-    mat"imagesc([-2.5,2.5],[-1.5,1.5],$logz)"
+    mat"imagesc([-$width,$width],[-$height,$height ],$logz)"
     mat"colorbar"
 
-    # # mat"axis([ -$width,$width,-$height,$height ])"
+    # mat"axis([ -$width,$width,-$height,$height ])"
     # mat"axis([ -1,1,-1,1])"
     # mat"savefig($file_name)"
 
