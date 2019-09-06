@@ -10,7 +10,7 @@ using Printf
 
 include("leap_frog_definitions.jl")
 
-max_hit=1000
+max_hit=10
 barrier=10
 condition_max_hits(u,t,integrator)= u[5]>max_hit || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>barrier
 affect_stop!(integrator) = terminate!(integrator)
