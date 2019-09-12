@@ -9,9 +9,9 @@ using Printf
 
 
 include("leap_frog_definitions.jl")
-
-max_hit=1000
+max_hit=500
 barrier=10
+
 condition_max_hits(u,t,integrator)= u[5]>max_hit || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>barrier
 affect_stop!(integrator) = terminate!(integrator)
 
@@ -27,7 +27,7 @@ callback_max_hits=DiscreteCallback(condition_max_hits,affect_stop!)
 callback_hits_PSS=ContinuousCallback(condition_hits_PSS, affect_update_iterator!,nothing)
 cb=CallbackSet(callback_hits_PSS, callback_max_hits)
 
-function escape_exit_num(mesh_list,t_end,Energy_A,max_hit)
+function escape_exit_num(mesh_list,t_end,Energy_A)
     Q=mesh_list[2]; P=mesh_list[1];
     H=(2*Energy_A)^2
     tol_dist=1e-5
@@ -46,7 +46,7 @@ function escape_exit_num(mesh_list,t_end,Energy_A,max_hit)
 
         prob = ODEProblem(Eq_of_M,u0,(0., t_end))
         # sol=solve(prob,RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb)
-        sol=solve(prob, RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-8,callback=cb,save_start=true,save_end=true,save_everystep=false)
+        sol=solve(prob, RK4(),maxiters=1e20, reltol=1e-8,abstol=1e-10,callback=cb,save_start=true,save_end=true,save_everystep=false)
         uf=zeros(5)
         uf[1]=sol[1,end] #X
         uf[2]=sol[2,end] #P
@@ -54,7 +54,7 @@ function escape_exit_num(mesh_list,t_end,Energy_A,max_hit)
         uf[4]=sol[4,end] #Y
         uf[5]=0
         dH=abs(H_test(uf)-H)
-        if sol.u[end][5]==5
+        if sol.u[end][5]==max_hit
             return t_end
         else
             return sol.t[end]
