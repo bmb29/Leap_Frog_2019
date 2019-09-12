@@ -9,7 +9,12 @@ using Printf
 
 
 include("leap_frog_definitions.jl")
+<<<<<<< HEAD
 max_hit=500
+=======
+
+max_hit=10
+>>>>>>> 086410e02e9cb2f2b29b548f24eab56b12db90e1
 barrier=10
 
 condition_max_hits(u,t,integrator)= u[5]>max_hit || maximum([abs(u[1]),abs(u[2]),abs(u[3]),abs(u[4])])>barrier
