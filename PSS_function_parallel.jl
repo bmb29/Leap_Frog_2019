@@ -24,7 +24,6 @@ pygui(true)
     ArrP=P_start: delta_P:P_end
     ArrQ=Q_start: delta_Q: Q_end
 
-
     Q=ArrQ[Int(ceil(K/n_iter_Q))]
     P=ArrP[mod(K,n_iter_P)+1]
     max_hit=20
