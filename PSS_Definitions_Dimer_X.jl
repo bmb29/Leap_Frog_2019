@@ -35,7 +35,7 @@ function PSS_function(Q2,P2, H,  t_end)
         sol=solve(prob, Vern9(),maxiters=1e20, reltol=1e-13,abstol=1e-15,callback=cb,save_start=true,save_end=true,save_everystep=false)
         # sol=solve(prob, RK4(),maxiters=1e20, reltol=1e-6,abstol=1e-6,callback=cb,save_start=true,save_end=true,save_everystep=false)
         #output Q, P and dH
-        return sol[:,2:end-1][2,:],sol[:,2:end-1][5,:]
+        return sol[:,2:end-1][4,:],sol[:,2:end-1][5,:]
     else
     #need to return 3 values, dH=1 flags that there is no Y
         return 0, 0

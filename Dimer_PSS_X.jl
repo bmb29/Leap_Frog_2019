@@ -59,11 +59,11 @@ t_end=1e4;
 #     ="k");
 
 N_iter_Q=100;#50
-Q_start=-1.2
-Q_end=1.2
+Q_start=-3
+Q_end=3
 N_iter_P=100
-P_start=-1.4
-P_end=1.4
+P_start=-3
+P_end=3
 ArrP=range(P_start,stop=P_end,length=N_iter_P)
 ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
 Brandons_Colors=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" ,"#cedb9c" ,"#8c6d31","#bd9e39" ,"#e7ba52","#e7cb94","#843c39","#ad494a" ,"#d6616b","#e7969c" ,"#7b4173" ,"#a55194","#ce6dbd" ,"#de9ed6"];
@@ -73,7 +73,7 @@ Brandons_Colors=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,
     Q_PSS,P_PSS=PSS_function(ArrQ[k], 0, Energy, t_end);       
     current_color=Brandons_Colors[mod(k,length(Brandons_Colors))+1]
     if Q_PSS!=0
-        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',.5,'color',$current_color); hold on;"
+        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',1,'color',$current_color); hold on;"
         # plot(Q_PSS,P_PSS,".", markersize=1,c=current_color);
     end
 end
@@ -81,7 +81,7 @@ end
     Q_PSS,P_PSS=PSS_function(0,ArrP[k], Energy, t_end);       
     current_color=Brandons_Colors[mod(k,length(Brandons_Colors))+1]
     if Q_PSS!=0
-        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',.5,'color',$current_color); hold on;"
+        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',1'color',$current_color); hold on;"
         #  plot(Q_PSS,P_PSS,".", markersize=1,c=current_color);
     end
 end

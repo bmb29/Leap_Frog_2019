@@ -18,7 +18,7 @@ function Q1_find_dimer(Q2,P2,H_dimer)
     end
 end
 
-H=range(.1,stop=0.25,length=15)
+H=range(.1,stop=0.25,length=14)
 
 @showprogress 1 "Computing..." for Energy in H
 location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/"
@@ -30,7 +30,7 @@ mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;"
 mat"xlabel('Q')"
 mat"ylabel('P')"
 mat"title($h_title)"
-# Q1=Q1_find_dimer(.2,.4,H)
+# Q1=Q1_find_dimer(0,.4,H)
 # t_end=1000.0;
 # q0,p0=[zeros(2) for i in 1:2]
 # q0[1]=Q1; 
@@ -61,18 +61,18 @@ mat"title($h_title)"
 
 
 
-t_end=1e4;
+t_end=1e3;
 # figure()
 # @time Q_PSS,P_PSS=PSS_function( q0[2], p0[2], H, t_end,count);
 # plot(Q_PSS,P_PSS,".", markersize=4, c
 #     ="k");
 
-N_iter_Q=100;#50
-Q_start=-1.2
-Q_end=1.2
-N_iter_P=100
-P_start=-1.42
-P_end=1.42
+N_iter_Q=1000;#50
+Q_start=-2.5
+Q_end=2.5
+N_iter_P=1000
+P_start=-3
+P_end=3
 ArrP=range(P_start,stop=P_end,length=N_iter_P)
 ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
 Brandons_Colors=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" ,"#cedb9c" ,"#8c6d31","#bd9e39" ,"#e7ba52","#e7cb94","#843c39","#ad494a" ,"#d6616b","#e7969c" ,"#7b4173" ,"#a55194","#ce6dbd" ,"#de9ed6"];

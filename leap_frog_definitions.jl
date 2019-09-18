@@ -57,7 +57,7 @@ using Roots
 function Q1_find_dimer(Q2,P2,H_dimer)
     Q1_to_find(Q1)=Hamiltonian_Dimer([Q1,Q2],[0,P2],1)-H_dimer
     try
-        Q1=find_zero(Q1_to_find,.01,maxeval=100,maxfnevals=300,tol=1e-15)
+        Q1=find_zeros(Q1_to_find,0,4,maxeval=100,maxfnevals=300,tol=1e-15)
      catch
         Q1=zeros(0)
     end
