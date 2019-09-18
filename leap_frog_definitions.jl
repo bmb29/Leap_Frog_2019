@@ -53,3 +53,20 @@ function Yfind_Aref(Q,P,H_Aref)
         Y=zeros(0)
     end
 end
+using Roots
+function Q1_find_dimer(Q2,P2,H_dimer)
+    Q1_to_find(Q1)=Hamiltonian_Dimer([Q1,Q2],[0,P2],1)-H_dimer
+    try
+        Q1=find_zero(Q1_to_find,.01,maxeval=100,maxfnevals=300,tol=1e-15)
+     catch
+        Q1=zeros(0)
+    end
+end
+function P1_find_dimer(Q2,P2,H_dimer)
+    P1_to_find(P1)=Hamiltonian_Dimer([0,Q2],[P1,P2],1)-H_dimer
+    try
+        P1=find_zero(P1_to_find,.01,maxeval=100,maxfnevals=300,tol=1e-15)
+     catch
+        P1=zeros(0)
+    end
+end
