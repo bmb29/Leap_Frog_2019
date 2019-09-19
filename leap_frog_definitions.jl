@@ -65,7 +65,15 @@ end
 function P1_find_dimer(Q2,P2,H_dimer)
     P1_to_find(P1)=Hamiltonian_Dimer([0,Q2],[P1,P2],1)-H_dimer
     try
-        P1=find_zero(P1_to_find,.01,maxeval=100,maxfnevals=300,tol=1e-15)
+        P1=find_zero(P1_to_find,.001,maxeval=10000,maxfnevals=300,tol=1e-15)
+     catch
+        P1=zeros(0)
+    end
+end
+function P1_find_dimer_second(Q2,P2,H_dimer)
+    P1_to_find(P1)=Hamiltonian_Dimer([0,Q2],[P1,P2],1)-H_dimer
+    try
+        P1=find_zero(P1_to_find,1.4,maxeval=10000,maxfnevals=300,tol=1e-15)
      catch
         P1=zeros(0)
     end

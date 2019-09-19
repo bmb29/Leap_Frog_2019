@@ -3,7 +3,7 @@ max_hit=1000
 barrier=20
 
 
-condition_max_hits(u,t,integrator)= u[6]>max_hit 
+condition_max_hits(u,t,integrator)= u[6]>max_hit
 affect_stop!(integrator) = terminate!(integrator)
 function condition_hits_PSS(u,t,integrator) # Event when event_f(u,t) == 0
    u[4]
@@ -23,7 +23,7 @@ function PSS_function(Q2,P2, H,  t_end)
     if ~isempty(Q1)
         # println(Q1)
         q0,p0=[zeros(3) for i in 1:2]
-        q0[1]=Q1
+        q0[1]=Q1[1]
         q0[2]=Q2
         q0[3]=0
         p0[1]=0

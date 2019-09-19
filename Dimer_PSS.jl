@@ -30,6 +30,7 @@ mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;"
 mat"xlabel('Q')"
 mat"ylabel('P')"
 mat"title($h_title)"
+mat"axis([-3, 3, -4, 4])"
 # Q1=Q1_find_dimer(0,.4,H)
 # t_end=1000.0;
 # q0,p0=[zeros(2) for i in 1:2]
@@ -61,18 +62,18 @@ mat"title($h_title)"
 
 
 
-t_end=1e3;
+t_end=1e5;
 # figure()
 # @time Q_PSS,P_PSS=PSS_function( q0[2], p0[2], H, t_end,count);
 # plot(Q_PSS,P_PSS,".", markersize=4, c
 #     ="k");
 
-N_iter_Q=1000;#50
-Q_start=-2.5
-Q_end=2.5
-N_iter_P=1000
-P_start=-3
-P_end=3
+N_iter_Q=200;#50
+Q_start=-2
+Q_end=2
+N_iter_P=200
+P_start=-1.4
+P_end=1.4
 ArrP=range(P_start,stop=P_end,length=N_iter_P)
 ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
 Brandons_Colors=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,"#b5cf6b" ,"#cedb9c" ,"#8c6d31","#bd9e39" ,"#e7ba52","#e7cb94","#843c39","#ad494a" ,"#d6616b","#e7969c" ,"#7b4173" ,"#a55194","#ce6dbd" ,"#de9ed6"];
@@ -82,7 +83,7 @@ Brandons_Colors=["#393b79" ,"#5254a3","#6b6ecf","#9c9ede" ,"#637939","#8ca252" ,
     Q_PSS,P_PSS=PSS_function(ArrQ[k], 0, Energy, t_end);       
     current_color=Brandons_Colors[mod(k,length(Brandons_Colors))+1]
     if Q_PSS!=0
-        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',.5,'color',$current_color); hold on;"
+        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',1,'color',$current_color); hold on;"
         # plot(Q_PSS,P_PSS,".", markersize=1,c=current_color);
     end
 end
@@ -90,7 +91,7 @@ end
     Q_PSS,P_PSS=PSS_function(0,ArrP[k], Energy, t_end);       
     current_color=Brandons_Colors[mod(k,length(Brandons_Colors))+1]
     if Q_PSS!=0
-        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',.5,'color',$current_color); hold on;"
+        mat"plot($Q_PSS,$P_PSS,'.','MarkerSize',1,'color',$current_color); hold on;"
         #  plot(Q_PSS,P_PSS,".", markersize=1,c=current_color);
     end
 end
