@@ -23,10 +23,10 @@ include("escape_num_dimer.jl")
     using Printf
     using MATLAB
     using .escape_num_dimer
-    t_end = exp(3)
+    t_end = exp(4)
     # width = sqrt(3); height = 1
-    width = 2; height =2
-    n_iter_Q = 1000;n_iter_P = n_iter_Q; N = n_iter_P * n_iter_Q;
+    width = 2.5; height=5
+    n_iter_Q = 1000;n_iter_P = 2*n_iter_Q; N = n_iter_P * n_iter_Q;
     ArrP = range(-width, stop = width, length = n_iter_P)
     ArrQ = range(-height, stop = height, length = n_iter_Q)
     mesh_P=[P for Q in ArrQ, P in ArrP]
@@ -34,7 +34,7 @@ include("escape_num_dimer.jl")
     mesh = [(P, Q) for Q in ArrQ, P in ArrP]
     mesh_list = reshape(mesh, 1, :)
     t_end = t_end * ones(n_iter_Q,n_iter_P);
-    H=.22
+    H=.2
     location = "/mnt/bdd38f66-9ece-451a-b915-952523c139d2/Escape/"
     # location = "/Users/brandonbehring/Desktop/"
 end
@@ -50,14 +50,14 @@ end
 
     logz=log1p.(num_until_exit)
     mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;"
-    # # mat"plot($P_0,$Q_0 ,'b.','MarkerSize',3)"
-    # # mat"plot($P_1,$Q_1 ,'r.','MarkerSize',3)"
-    # # mat"plot($P_2,$Q_2 ,'g.','MarkerSize',3)"
-    # # mat"plot($P_4,$Q_4 ,'c.','MarkerSize',3)"
-    # # mat"plot($P_5,$Q_5 ,'y.','MarkerSize',3)"
+    # # # mat"plot($P_0,$Q_0 ,'b.','MarkerSize',3)"
+    # # # mat"plot($P_1,$Q_1 ,'r.','MarkerSize',3)"
+    # # # mat"plot($P_2,$Q_2 ,'g.','MarkerSize',3)"
+    # # # mat"plot($P_4,$Q_4 ,'c.','MarkerSize',3)"
+    # # # mat"plot($P_5,$Q_5 ,'y.','MarkerSize',3)"
     mat"imagesc([-$width,$width],[-$height,$height ],$logz)"
     mat"colorbar"
 
     mat"axis([ -$width,$width,-$height,$height ])"
-    # mat"axis([ -1,1,-1,1])"
+    # # mat"axis([ -1,1,-1,1])"
     mat"savefig($file_name)"

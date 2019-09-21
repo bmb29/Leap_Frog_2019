@@ -1,5 +1,5 @@
 include("leap_frog_definitions.jl")
-max_hit=1000
+max_hit=10000
 barrier=20
 
 

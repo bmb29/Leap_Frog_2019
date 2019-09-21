@@ -9,7 +9,7 @@ using Printf
 
 
 include("leap_frog_definitions.jl")
-max_hit=500
+max_hit=1000
 barrier=10
 
 
@@ -28,7 +28,7 @@ callback_hits_PSS=ContinuousCallback(condition_hits_PSS, affect_update_iterator!
 cb=CallbackSet(callback_hits_PSS, callback_max_hits)
 
 function escape_exit_num_dimer(mesh_list,t_end,H)
-    Q2=mesh_list[2]; P2=mesh_list[1];
+    Q2=mesh_list[1]; P2=mesh_list[2];
     P1=P1_find_dimer(Q2,P2,H)
     if isempty(P1)
         P1=P1_find_dimer_second(Q2,P2,H)
@@ -47,7 +47,7 @@ function escape_exit_num_dimer(mesh_list,t_end,H)
         prob= HamiltonianProblem{true}(Hamiltonian_Dimer, q0, p0, (0., t_end));
         #solve ode , save_everystep=false is important to prevent sol to include all points, not just event points
         sol=solve(prob, RK4(),maxiters=1e20, reltol=1e-8,callback=cb,save_start=true,save_end=true,save_everystep=false)
-        if sol.u[end][6]==max_hit
+        if sol.u[end][6]>max_hit-3
             return t_end
         else
             return sol.t[end]
@@ -61,7 +61,7 @@ function escape_exit_num_dimer(mesh_list,t_end,H)
         #     end
         # end
     else
-        return 0.0
+        return NaN
     end
 end
 

@@ -9,14 +9,16 @@ using PyPlot
 include("PSS_Definitions_Dimer_X.jl")
 # pygui(true);
 
-H=range(.1905,stop=0.2505,length=5)
+H=.1
+Energy=H
 
-@showprogress 1 "Computing..." for Energy in H
+# H=range(.1505,stop=0.2505,length=9)
+
+# @showprogress 1 "Computing..." for Energy in H
 location="/mnt/bdd38f66-9ece-451a-b915-952523c139d2/"
 h=replace(@sprintf("%.15f",Energy),"."=>"_")
 h_title=@sprintf("%.8f",Energy)
 file_name=location*"DIMER_PSS_X"*h*".fig"
-file_name=h*".fig"
 mat"figure();set(gcf, 'Position',  [0, 0, 1500, 1500]); hold on;"
 mat"xlabel('Q')"
 mat"ylabel('P')"
@@ -60,10 +62,10 @@ t_end=1e5;
 #     ="k");
 
 N_iter_Q=200;#50
-Q_start=0
-Q_end=2.5
-N_iter_P=200
-P_start=0
+Q_start=.5
+Q_end=3
+N_iter_P=20
+P_start=0.2
 P_end=1.4
 ArrP=range(P_start,stop=P_end,length=N_iter_P)
 ArrQ=range(Q_start,stop=Q_end,length=N_iter_Q)
@@ -91,4 +93,4 @@ end
 
 mat"savefig($file_name)"
 
-end
+# end
